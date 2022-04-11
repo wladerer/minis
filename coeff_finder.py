@@ -30,6 +30,7 @@ with open(file_name) as f: #extracts the coefficients from the coefficient array
     for line in lines:
         if line_count == highest_index -1:
             orbital = re.search(r'        ([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])', line)
-            print(orbital.group(1))
+            print('Can be found on line ', highest_index)
+            print('Possibly orbital',orbital.group(1))
         line_count += 1
 
