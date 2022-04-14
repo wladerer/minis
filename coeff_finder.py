@@ -5,7 +5,9 @@ import sys
 MO_regex = r'        \b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])  ........    ......' #Unique pattern for each individual MO
 orb_regex = r'..   \(...[1-9][0-9][0-9][0-9]\)' #Unique pattern for any orbital component 
 
+
 def coeffs_by_line(file_name, orbital):
+    '''Takes in a rasssf.log file and as user specified orbital, returns the sum of the square of the coefficients of the specified orbital on each line'''
     orbital = orbital + orb_regex #concatenates orbital to orb_regex string, also change functionality once you figure out how to use terminal
     with open(file_name) as f: 
         lines = f.readlines() #checks for orbitals line by line
@@ -27,6 +29,9 @@ def coeffs_by_line(file_name, orbital):
 
 
 def find_orbs(file_name):
+    '''
+    takes a rasscf.log file and prints the lines of the file corresponding to the largest coefficients in descending order
+    '''
     orbital = str(input('Orbital: '))
     coefficients = coeffs_by_line(file_name, orbital)
     highest_values = sorted(coefficients, reverse=True) #find highest values in list
