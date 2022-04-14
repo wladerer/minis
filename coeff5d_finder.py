@@ -6,7 +6,7 @@ MO_regex = r'        \b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])  ........    .....
 orb_regex = r'..   \(...[1-9][0-9][0-9][0-9]\)' #Unique pattern for any orbital component 
 
 def coeffs_by_line(file_name, orbital):
-    orbital = '5d' + orb_regex #concatenates orbital to orb_regex string, also change functionality once you figure out how to use terminal
+    orbital = orbital + orb_regex #concatenates orbital to orb_regex string, also change functionality once you figure out how to use terminal
     with open(file_name) as f: 
         lines = f.readlines() #checks for orbitals line by line
         coefficients_per_line = [] #saves all coefficients per line
