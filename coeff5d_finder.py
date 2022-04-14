@@ -5,7 +5,7 @@ import sys
 MO_regex = r'        \b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])  ........    ......' #Unique pattern for each individual MO
 orb_regex = r'..   \(...[1-9][0-9][0-9][0-9]\)' #Unique pattern for any orbital component 
 
-def coeffs_by_line(file_name):
+def coeffs_by_line(file_name, orbital):
     orbital = '5d' + orb_regex #concatenates orbital to orb_regex string, also change functionality once you figure out how to use terminal
     with open(file_name) as f: 
         lines = f.readlines() #checks for orbitals line by line
@@ -26,8 +26,8 @@ def coeffs_by_line(file_name):
     return coefficients_per_line
 
 
-def find_orbs(file_name):
-    coefficients = coeffs_by_line(file_name)
+def find_orbs(file_name,orbital):
+    coefficients = coeffs_by_line(file_name, orbital)
     highest_values = sorted(coefficients, reverse=True) #find highest values in list
     highest_indices = []
     for value in highest_values:
@@ -52,5 +52,5 @@ def find_orbs(file_name):
     #         line_count += 1
 
 if __name__ == '__main__':
-    globals()[sys.argv[1]](sys.argv[2])
+    globals()[sys.argv[1]](sys.argv[2])(sys.argv[3])
 
