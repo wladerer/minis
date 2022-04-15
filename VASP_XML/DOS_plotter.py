@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import xml.etree.ElementTree as et 
+import sys 
 
 sns.set_theme(style="whitegrid")
 
@@ -71,6 +72,10 @@ def plot_ion(file):
     plt.ylim(-8.00, 15.00)
     plt.title('Ion 1')
     plt.show()
+
+
+if __name__ == '__main__':
+    globals()[sys.argv[1]](sys.argv[2])
 
 # for name in names[1:]:
 #     sns.lineplot(data=data, x=name, y='energy')
