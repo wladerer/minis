@@ -1,12 +1,10 @@
+from unicodedata import name
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
+import plotly.express as px
 import xml.etree.ElementTree as et 
 import sys 
-
-sns.set_theme(style="whitegrid")
-
 
 """"
 This is meant to be a catch all parser for the vasp.xml outputs. It should be able to produce DOS plots and fetch pertinent information
@@ -56,22 +54,28 @@ def dos_dataframe(file):
 
     return df, columns
 
-
-
 def plot_ion(file):
     ion_of_interest = int(input('Ion: '))
     data, names = dos_dataframe(file)
-    energy = data[data['ind']==ion_of_interest]['energy']
+    data = data[data['ind']==ion_of_interest]
+    fig = px.line(data, x=names, y='energy')
+    fig.show()
 
-    for orbital in names[1:]:
-        plt.plot(data[data['ind']==ion_of_interest][orbital],energy)
+# def plot_ion(file):
+#     ion_of_interest = int(input('Ion: '))
+#     data, names = dos_dataframe(file)
+#     energy = data[data['ind']==ion_of_interest]['energy']
 
-    plt.legend(names[1:])
-    plt.xlabel('DOS')
-    plt.ylabel('Energy')
-    plt.ylim(-8.00, 15.00)
-    plt.title('Ion 1')
-    plt.show()
+#     for orbital in names[1:]:
+#         plt.plot(data[data['ind']==ion_of_interest][orbital],energy)
+
+#     plt.legend(names[1:])
+#     plt.xlabel('DOS')
+#     plt.ylabel('Energy')
+#     plt.ylim(-8.00, 4.00)
+#     plt.xlim(0,0.5)
+#     plt.title('Ion ' + str(ion_of_interest))
+#     plt.show()
 
 
 if __name__ == '__main__':
