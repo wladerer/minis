@@ -8,7 +8,7 @@ import sys
 """"
 This is meant to be a catch all parser for the vasp.xml outputs. It should be able to produce DOS plots and fetch pertinent information
 """
-file = '/home/will/Documents/Minis/minis/VASP_XML/vasprun.xml' #will eventually be converted to command line argparse
+# file = '/home/will/Documents/Minis/minis/VASP_XML/vasprun.xml' #will eventually be converted to command line argparse
 def dos_dataframe(file):
     '''
     Takes a vasp xml file and extracts the density of states data for each ion -- output formatted as a tuple that contains the pandas dataframe and the list of orbitals within the ion's DOS plot
@@ -91,26 +91,6 @@ def plotDOS_sepl(file):
     fig = px.line(data, x=names, y='energy')
     fig.show()
 
-def plot_tDOS(file):
-    '''
-    Plots total density of states
-    '''
-    ion_of_interest = int(input('Ion: '))
-    data, names = dos_dataframe(file)
-    data = data[data['ind']==ion_of_interest]
-    
-    for i,name in enumerate(names):
-        if name == 'energy' or 'ind':
-            continue
-        data[names[i+1]] = data[name] + data[names[i+1]]
-
-    data = data[['energy','x2-y2','ind']]
-    data.rename(columns={'x2-y2': 'Total DOS'}, inplace=True)
-    names = ['energy', 'Total DOS']
-    fig = px.line(data, x=names, y='energy')
-    fig.show()
-
-
 def matplotlib_plot_ion(file):
     '''
     Same as plotDOS and related functions, but uses matplotlib 
@@ -122,8 +102,6 @@ def matplotlib_plot_ion(file):
     for orbital in names[1:]:
         plt.plot(data[data['ind']==ion_of_interest][orbital],energy)
 
-    
-
     plt.legend(names[1:])
     plt.xlabel('DOS')
     plt.ylabel('Energy')
@@ -133,17 +111,7 @@ def matplotlib_plot_ion(file):
     plt.show()
 
 
-plot_tDOS(file)
+if __name__ == '__main__':
+    globals()[sys.argv[1]](sys.argv[2])
 
-# if __name__ == '__main__':
-#     globals()[sys.argv[1]](sys.argv[2])
-
-# for name in names[1:]:
-#     sns.lineplot(data=data, x=name, y='energy')
-# plt.show()
-
-
-
-# for orbital in data[data['ind']==1]:
-#     plt.plot(orbital,data[data['ind']==1]['energy'])
 
