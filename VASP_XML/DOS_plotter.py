@@ -18,6 +18,11 @@ def dos_dataframe(file):
 
     list_of_ion_lists = xroot.findall('calculation')[0].findall('dos')[0].findall('partial')[0].findall('array')[0].findall('set')[0].findall('set') #path to ion DOS data, in rows 
     list_of_names = xroot.findall('calculation')[0].findall('dos')[0].findall('partial')[0].findall('array')[0].findall('field') #path to names of each column of the DOS data
+    list_of_ion_types = xroot.find('atominfo').findall('array')[0].findall('set')[0].findall('rc')
+    ion_types = []
+    for item in list_of_ion_types:
+        ion_types.append(item.findall('c')[0].text.split()[:][0]) #forgive me lord for I have sinned
+
 
     columns = [] #contains the names of the orbitals being plotted
     for name in list_of_names:
@@ -53,14 +58,31 @@ def dos_dataframe(file):
         df_temp["ind"] = ind_arr
         df = pd.concat([df, df_temp])
 
-    return df, columns
+    return df, columns, ion_types
     
 
 def plotDOS(file):
     ion_of_interest = int(input('Ion: '))
-    data, names = dos_dataframe(file)
+    data, names, ion_types = dos_dataframe(file)
     data = data[data['ind']==ion_of_interest]
     fig = px.line(data, x=names, y='energy')
+    fig.update_layout(
+    font={
+    'family': 'Copmuter Modern',
+    'size': 16
+    },
+    title={
+        'text': 'Density of states for ' + ion_types[ion_of_interest-1] + ' (Ion ' + str(ion_of_interest) + ')',
+        'y':0.99,
+        'x':0.5,
+        'xanchor': 'center',
+        'yanchor': 'top',
+    },
+    yaxis_title = r'$E - E_{Fermi}$',
+    xaxis_title = 'Density (states/eV)',
+    legend_title_text='Orbital'
+    )
+    
     fig.show()
 
 def plotDOS_sepl(file):
@@ -68,7 +90,7 @@ def plotDOS_sepl(file):
     Plots density of states of a specific ion, with each orbtial type summed together
     '''
     ion_of_interest = int(input('Ion: '))
-    data, names = dos_dataframe(file)
+    data, names, ion_types = dos_dataframe(file)
     data = data[data['ind']==ion_of_interest]
 
     for i,name in enumerate(names):
@@ -89,6 +111,22 @@ def plotDOS_sepl(file):
 
     names = ['energy', 's', 'p', 'd']
     fig = px.line(data, x=names, y='energy')
+    fig.update_layout(
+    font={
+    'family': 'Copmuter Modern',
+    'size': 16
+    },
+    title={
+        'text': 'Density of states for ' + ion_types[ion_of_interest-1] + ' (Ion ' + str(ion_of_interest) + ')',
+        'y':0.99,
+        'x':0.5,
+        'xanchor': 'center',
+        'yanchor': 'top',
+    },
+    yaxis_title = r'$E - E_{Fermi}$',
+    xaxis_title = 'Density (states/eV)',
+    legend_title_text='Total Density'
+    )
     fig.show()
 
 def matplotlib_plot_ion(file):
@@ -107,7 +145,7 @@ def matplotlib_plot_ion(file):
     plt.ylabel('Energy')
     plt.ylim(-8.00, 4.00)
     plt.xlim(0,0.5)
-    plt.title('Ion ' + str(ion_of_interest))
+    plt.title('Ion ' + '(' + ion_types[ion_of_interest -1] + ')')
     plt.show()
 
 
