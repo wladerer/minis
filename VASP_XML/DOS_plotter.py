@@ -78,7 +78,7 @@ def plotDOS(file):
         'xanchor': 'center',
         'yanchor': 'top',
     },
-    yaxis_title = r'$E - E_{Fermi}$',
+    yaxis_title = r'$E - E_{Fermi}$ [eV]',
     xaxis_title = 'Density (states/eV)',
     legend_title_text='Orbital'
     )
@@ -123,9 +123,9 @@ def plotDOS_sepl(file):
         'xanchor': 'center',
         'yanchor': 'top',
     },
-    yaxis_title = r'$E - E_{Fermi}$',
+    yaxis_title = r'$E - E_{Fermi}$ [eV]',
     xaxis_title = 'Density (states/eV)',
-    legend_title_text='Total Density'
+    legend_title_text='Total Density per Orbital'
     )
     fig.show()
 
