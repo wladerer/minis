@@ -64,7 +64,7 @@ def dos_dataframe(file):
     return df, columns, ion_types, efermi
     
 
-def plotDOS(file):
+def plotDOS(file, xrange=[0,1], yrange=[-4,6]):
     ion_of_interest = int(input('Ion: '))
     data, names, ion_types, efermi = dos_dataframe(file)
     data = data[data['ind']==ion_of_interest]
@@ -81,8 +81,8 @@ def plotDOS(file):
         'xanchor': 'center',
         'yanchor': 'top',
     },
-    yaxis=dict(showgrid=False, title=r'$E - E_{Fermi}$ [eV]'),
-    xaxis=dict(showgrid=False, title= 'Density (states/eV)'),
+    yaxis=dict(showgrid=False, title=r'$E - E_{Fermi}$ [eV]',range=yrange),
+    xaxis=dict(showgrid=False, title= 'Density (states/eV)',range=xrange),
     legend_title_text='Orbital',
     )
 
@@ -154,5 +154,3 @@ def matplotlib_plot_ion(file):
 
 if __name__ == '__main__':
     globals()[sys.argv[1]](sys.argv[2])
-
-
