@@ -5,10 +5,6 @@ import plotly.express as px
 import xml.etree.ElementTree as et 
 import sys 
 
-""""
-This is meant to be a catch all parser for the vasp.xml outputs. It should be able to produce DOS plots and fetch pertinent information
-"""
-# file = '/home/will/Documents/Minis/minis/VASP_XML/vasprun.xml' #will eventually be converted to command line argparse
 def dos_dataframe(file):
     '''
     Takes a vasp xml file and extracts the density of states data for each ion -- output formatted as a tuple that contains the pandas dataframe and the list of orbitals within the ion's DOS plot
@@ -20,21 +16,9 @@ def dos_dataframe(file):
     list_of_names = xroot.findall('calculation')[0].findall('dos')[0].findall('partial')[0].findall('array')[0].findall('field') #path to names of each column of the DOS data
     list_of_ion_types = xroot.find('atominfo').findall('array')[0].findall('set')[0].findall('rc')
     efermi = float(xroot.findall('calculation')[0].findall('dos')[0].findall('i')[0].text.split()[0])
-    ion_types = []
-    for item in list_of_ion_types:
-        ion_types.append(item.findall('c')[0].text.split()[:][0]) #forgive me lord for I have sinned
-
-
-    columns = [] #contains the names of the orbitals being plotted
-    for name in list_of_names:
-        columns.append(name.text.replace(' ', '')) #removes whitespace from titles
-
-
-    ions = []
-    for ion_list in list_of_ion_lists:
-        ions.append(ion_list.findall('set')[0].findall('r')) #takes DOS information per ion and adds it to the ions 
-
-
+    ion_types = [item.findall('c')[0].text.split()[:][0] for item in list_of_ion_types]
+    columns = [name.text.replace(' ', '') for name in list_of_names] #contains the names of the orbitals being plotted, removes whitespace from titles
+    ions = [ion_list.findall('set')[0].findall('r') for ion_list in list_of_ion_lists] #takes DOS information per ion and adds it to the ions 
     number_of_ions = len(ions) #makes sure we are separating the DOS data by ion properly 
 
     DOSs = []
