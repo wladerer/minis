@@ -2,13 +2,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
+from plotly.subplots import make_subplots
 import xml.etree.ElementTree as et 
 import sys 
 
-""""
-This is meant to be a catch all parser for the vasp.xml outputs. It should be able to produce DOS plots and fetch pertinent information
-"""
-# file = '/home/will/Documents/Minis/minis/VASP_XML/vasprun.xml' #will eventually be converted to command line argparse
+
+#Formatting stuff
+font_size = 16
+background_color = '#FFF'
+
+
+
 def dos_dataframe(file):
     '''
     Takes a vasp xml file and extracts the density of states data for each ion -- output formatted as a tuple that contains the pandas dataframe and the list of orbitals within the ion's DOS plot
@@ -20,21 +24,9 @@ def dos_dataframe(file):
     list_of_names = xroot.findall('calculation')[0].findall('dos')[0].findall('partial')[0].findall('array')[0].findall('field') #path to names of each column of the DOS data
     list_of_ion_types = xroot.find('atominfo').findall('array')[0].findall('set')[0].findall('rc')
     efermi = float(xroot.findall('calculation')[0].findall('dos')[0].findall('i')[0].text.split()[0])
-    ion_types = []
-    for item in list_of_ion_types:
-        ion_types.append(item.findall('c')[0].text.split()[:][0]) #forgive me lord for I have sinned
-
-
-    columns = [] #contains the names of the orbitals being plotted
-    for name in list_of_names:
-        columns.append(name.text.replace(' ', '')) #removes whitespace from titles
-
-
-    ions = []
-    for ion_list in list_of_ion_lists:
-        ions.append(ion_list.findall('set')[0].findall('r')) #takes DOS information per ion and adds it to the ions 
-
-
+    ion_types = [item.findall('c')[0].text.split()[:][0] for item in list_of_ion_types]
+    columns = [name.text.replace(' ', '') for name in list_of_names] #contains the names of the orbitals being plotted, removes whitespace from titles
+    ions = [ion_list.findall('set')[0].findall('r') for ion_list in list_of_ion_lists] #takes DOS information per ion and adds it to the ions 
     number_of_ions = len(ions) #makes sure we are separating the DOS data by ion properly 
 
     DOSs = []
@@ -70,30 +62,23 @@ def plotDOS(file, xrange=[0,1], yrange=[-4,6]):
     data = data[data['ind']==ion_of_interest]
     fig = px.line(data, x=names, y='energy',color_discrete_sequence=px.colors.qualitative.Vivid)
     fig.update_layout(
-    font={
-    'family': 'Copmuter Modern',
-    'size': 16
-    },
-    title={
-        'text': 'Density of states for ' + ion_types[ion_of_interest-1] + ' (Ion ' + str(ion_of_interest) + ')',
-        'y':0.99,
-        'x':0.5,
-        'xanchor': 'center',
-        'yanchor': 'top',
-    },
-    yaxis=dict(showgrid=False, title=r'$E - E_{Fermi}$ [eV]',range=yrange),
-    xaxis=dict(showgrid=False, title= 'Density (states/eV)',range=xrange),
-    legend_title_text='Orbital',
-    )
+    plot_bgcolor="#FFF",
+    font=dict(family='Copmuter Modern', size=font_size),
+    title=dict(text= 'Density of states for ' + ion_types[ion_of_interest-1] + ' (Ion ' + str(ion_of_interest) + ')', y=0.99, x=0.5, xanchor='center', yanchor='top'),
+    yaxis=dict(showgrid=False, title=r'$E - E_{Fermi}$ [eV]',range=yrange, linecolor="#000000"),
+    xaxis=dict(showgrid=False, title= 'Density (states/eV)',range=xrange, linecolor="#000000"),
+    legend_title_text='Orbital')
+
+    fig.add_shape(type="line", line_color="black", line_width=1, opacity=1, line_dash="dash", x0=0, x1=1, xref="paper", y0=0, y1=0, yref="y")
 
     fig.show()
 
-def plotDOS_sepl(file):
+def plotDOS_sepl(file, xrange=[0,2], yrange=[-4,6]):
     '''
     Plots density of states of a specific ion, with each orbtial type summed together
     '''
     ion_of_interest = int(input('Ion: '))
-    data, names, ion_types = dos_dataframe(file)
+    data, names, ion_types, efermi = dos_dataframe(file)
     data = data[data['ind']==ion_of_interest]
 
     for i,name in enumerate(names):
@@ -115,42 +100,30 @@ def plotDOS_sepl(file):
     names = ['energy', 's', 'p', 'd']
     fig = px.line(data, x=names, y='energy', color_discrete_sequence =px.colors.qualitative.Dark24)
     fig.update_layout(
-    font={
-    'family': 'Copmuter Modern',
-    'size': 16
-    },
-    title={
-        'text': 'Density of states for ' + ion_types[ion_of_interest-1] + ' (Ion ' + str(ion_of_interest) + ')',
-        'y':0.99,
-        'x':0.5,
-        'xanchor': 'center',
-        'yanchor': 'top',
-    },
-    yaxis_title = r'$E - E_{Fermi}$ [eV]',
-    xaxis_title = 'Density (states/eV)',
-    legend_title_text='Total Density per Orbital',
-    )
+    plot_bgcolor="#FFF",
+    font=dict(family='Copmuter Modern', size=font_size),
+    title=dict(text= 'Density of states for ' + ion_types[ion_of_interest-1] + ' (Ion ' + str(ion_of_interest) + ')', y=0.99, x=0.5, xanchor='center', yanchor='top'),
+    yaxis=dict(showgrid=False, title=r'$E - E_{Fermi}$ [eV]',range=yrange, linecolor="#000000"),
+    xaxis=dict(showgrid=False, title= 'Density (states/eV)',range=xrange, linecolor="#000000"),
+    legend_title_text='Orbital')
+
+    fig.add_shape(type="line", line_color="black", line_width=1, opacity=1, line_dash="dash", x0=0, x1=1, xref="paper", y0=0, y1=0, yref="y")
+
     fig.show()
 
-def matplotlib_plot_ion(file):
-    '''
-    Same as plotDOS and related functions, but uses matplotlib 
-    '''
-    ion_of_interest = int(input('Ion: '))
-    data, names = dos_dataframe(file)
-    energy = data[data['ind']==ion_of_interest]['energy']
 
-    for orbital in names[1:]:
-        plt.plot(data[data['ind']==ion_of_interest][orbital],energy)
-
-    plt.legend(names[1:])
-    plt.xlabel('DOS')
-    plt.ylabel('Energy')
-    plt.ylim(-8.00, 4.00)
-    plt.xlim(0,0.5)
-    plt.title('Ion ' + '(' + ion_types[ion_of_interest -1] + ')')
-    plt.show()
-
+def plotDOS_comp(file, xrange=[0,1], yrange=[-4,6]):
+    data, names, ion_types, efermi = dos_dataframe(file)
+    fig = px.line(data, x=names, y='energy', facet_col='ind', facet_col_wrap=4, facet_row_spacing=0.04,facet_col_spacing=0.04)
+    fig.update_layout(
+    plot_bgcolor="#FFF",
+    font=dict(family='Copmuter Modern', size=font_size),
+    yaxis=dict(showgrid=False, title=r'$E - E_{Fermi}$ [eV]',range=yrange, linecolor="#000000"),
+    xaxis=dict(showgrid=False, title= 'Density (states/eV)',range=xrange, linecolor="#000000"),
+    legend_title_text='Orbital')
+    fig.update_traces(hovertemplate=None, hoverinfo='skip')
+    fig.update_layout(hovermode='y unified')
+    fig.show()
 
 if __name__ == '__main__':
     globals()[sys.argv[1]](sys.argv[2])
