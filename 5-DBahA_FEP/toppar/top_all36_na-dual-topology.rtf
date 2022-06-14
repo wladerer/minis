@@ -1,0 +1,297 @@
+*  \\\\ CHARMM36 All-Hydrogen Nucleic Acid Topology File ////
+*   Alexander D. MacKerell Jr. and coworkers
+*                      April 2011
+* All comments to the CHARMM web site: www.charmm.org
+*           parameter set discussion forum
+*
+36 1
+
+!updated 2016/8. see toppar_all.history.
+
+!2010/2011 additions
+! ejd, 2010 RNA update
+! adm, 2011 DNA update
+!  For DNA update, new atom type required for P of DNA. This required
+!  replication of a number of parameters and the creation of new
+!  patches, DEOX and DEO5, to convert RNA to DNA, such that previous
+!  CHARMM scripts to generate DNA will no longer work.  Note that the
+!  atom type change to P3 ONLY applies to the phosphodester linkage in
+!  DNA and NOT to terminal phosphates, DMP etc.
+!
+
+!example of new generate/patch combination to generate DNA
+!
+!read sequence card
+!* 1bna, strand 1
+!*
+!3
+!cyt gua cyt
+!
+!generate a first 5ter last 3ter setup warn
+!
+!patch deo5 a 1 setup warn !special patch for 5-terminal deoxy residue
+!patch deox a 2 setup warn !new patch to convert RNA to DNA
+!patch deox a 3 setup warn !no special patch required for 3-terminal deoxy residue
+!
+!autogenerate angles dihedrals !Use of AUTOGENERATE is essential
+
+! 
+!references
+!
+!NUCLEIC ACIDS
+!
+!Denning, E.J., Priyakumar, U.D., Nilsson, L., and MacKerell Jr., A.D.,
+!“Impact of 2’-hydroxyl sampling on the conformational properties of
+!RNA: Update of the CHARMM all-atom additive force field for RNA,”
+!JCC, 32: 1929-1943, 2011, PMC3082605
+!
+!Hart, K., Foloppe, N., Baker, C.M., Denning, E.J., Nilsson, L. 
+!and MacKerell Jr., A.D. “Optimization of the CHARMM additive force 
+!field for DNA: Improved treatment of the BI/BII conformational 
+!equilibrium,” JCTC, 8:348–362, 2012, PMC3285246
+!
+
+!Foloppe, N. and MacKerell, Jr., A.D. "All-Atom Empirical Force Field for
+!Nucleic Acids: 1) Parameter Optimization Based on Small Molecule and
+!Condensed Phase Macromolecular Target Data. JCC, 2000, 21: 86-104.
+!
+!MacKerell, Jr., A.D. and Banavali, N. "All-Atom Empirical Force Field for
+!Nucleic Acids: 2) Application to Molecular Dynamics Simulations of DNA
+!and RNA in Solution. JCC, 2000, 21: 105-120.
+!
+
+
+MASS  -1  HN1        1.00800 H ! Nucleic acid amine proton
+MASS  -1  HN2        1.00800 H ! Nucleic acid ring nitrogen proton
+MASS  -1  HN3        1.00800 H ! Nucleic acid aromatic carbon proton
+MASS  -1  HN4        1.00800 H ! Nucleic acid phosphate hydroxyl proton
+MASS  -1  HN5        1.00800 H ! Nucleic acid ribose hydroxyl proton
+MASS  -1  HN6        1.00800 H ! Nucleic acid ribose aliphatic proton
+MASS  -1  HN7        1.00800 H ! Nucleic acid proton (equivalent to protein HA)
+MASS  -1  HN8        1.00800 H ! Bound to CN8 in nucleic acids/model compounds
+MASS  -1  HN9        1.00800 H ! Bound to CN9 in nucleic acids/model compounds
+MASS  -1  CN1       12.01100 C ! Nucleic acid carbonyl carbon
+MASS  -1  CN1T      12.01100 C ! Nucleic acid carbonyl carbon (T/U C2)
+MASS  -1  CN2       12.01100 C ! Nucleic acid aromatic carbon to amide
+MASS  -1  CN3       12.01100 C ! Nucleic acid aromatic carbon 
+MASS  -1  CN3T      12.01100 C ! Nucleic acid aromatic carbon, Thy C5
+MASS  -1  CN4       12.01100 C ! Nucleic acid purine C8 and ADE C2  
+MASS  -1  CN5       12.01100 C ! Nucleic acid purine C4 and C5
+MASS  -1  CN5G      12.01100 C ! Nucleic acid guanine C5
+MASS  -1  CN7       12.01100 C ! Nucleic acid carbon (equivalent to protein CT1)
+MASS  -1  CN7B      12.01100 C ! Nucleic acid aliphatic carbon for C1'
+MASS  -1  CN8       12.01100 C ! Nucleic acid carbon (equivalent to protein CT2)
+MASS  -1  CN8B      12.01100 C ! Nucleic acid carbon (equivalent to protein CT2)
+MASS  -1  CN9       12.01100 C ! Nucleic acid carbon (equivalent to protein CT3)
+MASS  -1  NN1       14.00700 N ! Nucleic acid amide nitrogen
+MASS  -1  NN2       14.00700 N ! Nucleic acid protonated ring nitrogen
+MASS  -1  NN2B      14.00700 N ! From NN2, for N9 in GUA different from ADE
+MASS  -1  NN2U      14.00700 N ! Nucleic acid protonated ring nitrogen, ura N3
+MASS  -1  NN2G      14.00700 N ! Nucleic acid protonated ring nitrogen, gua N1
+MASS  -1  NN3       14.00700 N ! Nucleic acid unprotonated ring nitrogen 
+MASS  -1  NN3A      14.00700 N ! Nucleic acid unprotonated ring nitrogen, ade N1 and N3
+MASS  -1  NN3G      14.00700 N ! Nucleic acid unprotonated ring nitrogen, gua N3
+MASS  -1  NN4       14.00700 N ! Nucleic acid purine N7
+MASS  -1  NN6       14.00700 N ! Nucleic acid sp3 amine nitrogen (equiv to protein nh3)
+MASS  -1  ON1       15.99940 O ! Nucleic acid carbonyl oxygen
+MASS  -1  ON1C      15.99940 O ! Nucleic acid carbonyl oxygen, cyt O2
+MASS  -1  ON2       15.99940 O ! Nucleic acid phosphate ester oxygen
+MASS  -1  ON3       15.99940 O ! Nucleic acid =O in phosphate 
+MASS  -1  ON4       15.99940 O ! Nucleic acid phosphate hydroxyl oxygen
+MASS  -1  ON5       15.99940 O ! Nucleic acid ribose hydroxyl oxygen
+MASS  -1  ON6       15.99940 O ! Nucleic acid deoxyribose ring oxygen
+MASS  -1  ON6B      15.99940 O ! Nucleic acid ribose ring oxygen
+MASS  -1  P         30.97400 P ! phosphorus
+MASS  -1  P2        30.97400 P ! phosphorus, adm, 2011 DNA update
+MASS  -1  P3        30.97400 P ! pyrophosphate phosphorus
+MASS  -1  P4        30.97400 P ! protonated pyrophosphate phosphorus
+
+DECL  +P  
+DECL  +O1P 
+DECL  +O2P 
+DECL  +O5' 
+DECL  -O3' 
+ 
+DEFA FIRS none LAST none
+AUTOGENERATE ANGLES DIHEDRALS PATCH
+                                                  
+
+RESI AGH         -1.00  !             H61  H62!
+ATOM P    P       1.50  !               \  /
+ATOM O1P  ON3    -0.78  !                N6
+ATOM O2P  ON3    -0.78  !                |
+ATOM O5'  ON2    -0.57  !                C6
+ATOM C5'  CN8B   -0.08  !              //  \
+ATOM H5'  HN8     0.09  !              N1   C5--N7\\
+ATOM H5'' HN8     0.09  !              |    ||     C8-H8
+GROUP                   !              C2   C4--N9/
+ATOM C4'  CN7     0.16  !             / \\ /     \
+ATOM H4'  HN7     0.09  !           H2   N3       \
+ATOM O4'  ON6B   -0.50  !                          \
+ATOM C1'  CN7B    0.16  !                           \
+ATOM H1'  HN7     0.09  !                            \
+GROUP                   !        O1P    H5' H4'  O4'  \
+ATOM N9   NN2    -0.05  !         |      |    \ /   \  \
+ATOM C5   CN5     0.28  !        -P-O5'-C5'---C4'    C1'
+ATOM N7   NN4    -0.71  !         |      |     \     / \
+ATOM C8   CN4     0.34  !        O2P    H5''   C3'--C2' H1'
+ATOM H8   HN3     0.12  !                     / \   / \
+ATOM N1   NN3A   -0.74  !                  O3' H3' O2' H2''
+ATOM C2   CN4     0.50  !                   |       |
+ATOM H2   HN3     0.13  !                          H2'
+ATOM N3   NN3A   -0.75  
+ATOM C4   CN5     0.43  
+ATOM C6   CN2     0.46  
+ATOM N6   NN1    -0.77  
+ATOM H61  HN1     0.38  
+ATOM H62  HN1     0.38
+GROUP                   
+ATOM N9G   NN2B   -0.02  
+ATOM C4G   CN5     0.26  
+ATOM N2G   NN1    -0.68  
+ATOM H21G  HN1     0.32  
+ATOM H22G  HN1     0.35  
+ATOM N3G   NN3G   -0.74  
+ATOM C2G   CN2     0.75  
+ATOM N1G   NN2G   -0.34  
+ATOM H1G   HN2     0.26  
+ATOM C6G   CN1     0.54 
+ATOM O6G   ON1    -0.51
+ATOM C5G   CN5G    0.00
+ATOM N7G   NN4    -0.60
+ATOM C8G   CN4     0.25
+ATOM H8G   HN3     0.16
+GROUP
+ATOM C2'  CN7B    0.14
+ATOM H2'' HN7     0.09
+ATOM O2'  ON5    -0.66 
+ATOM H2'  HN5     0.43 
+GROUP
+ATOM C3'  CN7     0.01
+ATOM H3'  HN7     0.09
+ATOM O3'  ON2    -0.57 
+BOND P    O1P       P    O2P       P     O5'
+BOND O5'  C5'       C5'  C4'       C4'  O4'       C4'  C3'       O4'  C1'
+BOND C1'  N9        C1'  C2'       N9   C4        N9   C8        C4   N3
+BOND C2   N1        C6   N6
+BOND N6   H61       N6   H62       C6   C5        C5   N7
+BOND C2'  C3'       C2'  O2'       O2'  H2'       C3'  O3'       O3'  +P
+BOND C1'  H1'       C2'  H2''      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C5'  H5''      C8   H8        C2   H2
+DOUBLE  N1  C6      C2   N3        C4   C5        N7   C8
+IMPR N6   C6   H61  H62        C6   N1   C5   N6        
+DONO H61  N6   
+DONO H62  N6   
+DONO H2'  O2'
+ACCE N3
+ACCE N7
+ACCE N1            
+ACCE O1P  P
+ACCE O2P  P
+ACCE O2'
+ACCE O3'
+ACCE O4'
+ACCE O5'
+
+BOND C1'  N9G       N9G  C4G       N9G  C8G       C4G  N3G
+BOND C2G  N2G       C2G  N1G       N2G  H21G
+BOND N2G  H22G      N1G  H1G       N1G  C6G       C6G  C5G
+BOND C5G  N7G      
+BOND C8G  H8G  
+DOUBLE   C2G  N3G     C4G   C5G        N7G   C8G        C6G   O6G
+IMPR C2G   N3G   N1G   N2G        C6G   N1G   C5G   O6G        N2G   H21G  C2G   H22G
+DONO H21G  N2G            
+DONO H22G  N2G   
+DONO H1G   N1G   
+ACCE O6G   C6G         
+ACCE N3G    
+ACCE N7G    
+
+
+
+RESI TCH         -1.00  !                  H51    O4
+ATOM P    P       1.50  !                   |     ||
+ATOM O1P  ON3    -0.78  !               H52-C5M   C4    H3
+ATOM O2P  ON3    -0.78  !                   |  \ /  \  /
+ATOM O5'  ON2    -0.57  !                  H53  C5   N3
+ATOM C5'  CN8B   -0.08  !                       ||   |
+ATOM H5'  HN8     0.09  !                    H6-C6   C2
+ATOM H5'' HN8     0.09  !                        \  / \\  
+GROUP                   !                         N1   O2
+ATOM C4'  CN7     0.16  !                          \
+ATOM H4'  HN7     0.09  !                           \
+ATOM O4'  ON6B   -0.50  !                            \ 
+ATOM C1'  CN7B    0.16  !        O1P    H5' H4'  O4'  \
+ATOM H1'  HN7     0.09  !         |      |    \ /   \  \
+GROUP                   !        -P-O5'-C5'---C4'    C1'
+ATOM N1   NN2B   -0.34  !         |      |     \     / \
+ATOM C6   CN3     0.17  !        O2P    H5''   C3'--C2' H1'
+ATOM H6   HN3     0.17  !                     / \   / \
+ATOM C2   CN1T    0.51  !                  O3' H3' O2' H2''
+ATOM O2   ON1    -0.41  !                   |       | 
+ATOM N3   NN2U   -0.46  !                          H2'
+ATOM H3   HN2     0.36  !
+ATOM C4   CN1     0.50  !
+ATOM O4   ON1    -0.45  !
+ATOM C5   CN3T   -0.15
+ATOM C5M  CN9    -0.11
+ATOM H51  HN9     0.07
+ATOM H52  HN9     0.07
+ATOM H53  HN9     0.07
+GROUP                   
+ATOM N1C   NN2    -0.13  
+ATOM C6C   CN3     0.05  
+ATOM H6C   HN3     0.17  
+ATOM C5C   CN3    -0.13  
+ATOM H5C   HN3     0.07  
+ATOM C2C   CN1     0.52  
+ATOM O2C   ON1C   -0.49  
+ATOM N3C   NN3    -0.66  
+ATOM C4C   CN2     0.65  
+ATOM N4C   NN1    -0.75  
+ATOM H41C  HN1     0.37  
+ATOM H42C  HN1     0.33  
+GROUP
+ATOM C2'  CN7B    0.14
+ATOM H2'' HN7     0.09
+ATOM O2'  ON5    -0.66 
+ATOM H2'  HN5     0.43 
+GROUP
+ATOM C3'  CN7     0.01
+ATOM H3'  HN7     0.09
+ATOM O3'  ON2    -0.57 
+BOND P    O1P       P    O2P       P     O5'
+BOND O5'  C5'       C5'  C4'       C4'  O4'       C4'  C3'       O4'  C1'
+BOND C1'  N1        C1'  C2'       N1   C2        N1   C6
+BOND C2   N3        N3   H3        N3   C4       C4   C5
+BOND C5   C5M       C2'  C3'       C3'  O3'       O3'  +P
+BOND C2'  O2'       O2'  H2'
+BOND C1'  H1'       C2'  H2''      C3'  H3'       C4'  H4'       C5'  H5'
+BOND C5'  H5''      C6   H6        C5M  H51       C5M  H52       C5M  H53
+DOUBLE  C2   O2     C4   O4        C5   C6
+IMPR C2   N1   N3   O2        C4   N3   C5   O4        C5   C4   C6   C5M
+DONO H3   N3   
+DONO H2'  O2'
+ACCE O2   C2
+ACCE O4   C4
+ACCE O1P  P
+ACCE O2P  P       
+ACCE O2'
+ACCE O3'
+ACCE O4'
+ACCE O5'
+
+BOND C1'  N1C       N1C  C2C       N1C  C6C
+BOND C2C  N3C       C4C  N4C       N4C  H41C      N4C  H42C
+BOND C4C  C5C       
+BOND C5C  H5C       C6C  H6C
+DOUBLE   C2C   O2C  C5C  C6C       N3C  C4C
+IMPR C2C   N1C   N3C   O2C        C4C   N3C   C5C   N4C
+IMPR N4C   C4C   H41C  H42C      
+DONO H42C  N4C   
+DONO H41C  N4C   
+ACCE O2C   C2C
+ACCE N3C     
+
+end
+

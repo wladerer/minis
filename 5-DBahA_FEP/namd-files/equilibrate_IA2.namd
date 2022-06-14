@@ -1,0 +1,120 @@
+#############################################################
+## ADJUSTABLE PARAMETERS                                   ##
+#############################################################
+
+structure          dna_Na_WI.psf 
+coordinates        dna_Na_WI.pdb
+
+outputName         aqua-equil2 
+binaryoutput       yes
+binaryrestart	   yes	      
+
+bincoordinates     dna_Na_WI_equilNPT2.restart.coor
+binvelocities      dna_Na_WI_equilNPT2.restart.vel
+extendedSystem     dna_Na_WI_equilNPT2.restart.xsc
+
+
+set temperature    300
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Input
+paraTypeCharmm	    on
+# use bond for water
+parameters          ../toppar/par_all36_prot.prm
+parameters          ../toppar/par_all36_na.prm
+parameters          ../toppar/par_all36_carb.prm
+parameters          ../toppar/par_all36_lipid.prm
+parameters          ../toppar/par_all36_cgenff.prm
+
+parameters	    ../toppar/toppar_water_ions.str
+
+parameters          ../toppar/sim-params.prm
+
+# Force-Field Parameters 
+exclude             scaled1-4
+1-4scaling          1.0
+switching           on
+switchdist          10
+cutoff              12
+pairlistdist        14
+
+# Integrator Parameters 
+timestep            2  
+rigidBonds          all  
+nonbondedFreq       1
+fullElectFrequency  2  
+stepspercycle       20
+
+#PME (for full-system periodic electrostatics) 
+if {1} {
+PME                 yes
+PMEGridSpacing      1.0
+}
+
+# Constant Temperature Control
+langevin            on    
+langevinDamping     2.0 
+langevinTemp        $temperature
+langevinHydrogen    off    
+
+# perform constant pressure simulation
+if {1} {
+langevinPiston        on      
+langevinPistonTarget  1.01325 
+langevinPistonPeriod  200
+langevinPistonDecay   100
+langevinPistonTemp    $temperature
+
+useGroupPressure      yes
+}
+
+wrapwater	    on
+#wrapall	    on
+
+xstFreq             2500  
+outputEnergies      2500 
+dcdfreq             2500 
+restartfreq         1000000 
+outputPressure      2500 
+outputTiming        2500 
+
+
+#############################################################
+## EXTRA PARAMETERS                                        ##
+#############################################################
+
+if {1} {
+extraBonds on
+extraBondsFile extrabond.txt
+}
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+
+source                  ../tools/fep.tcl
+
+alch                    on
+alchType                FEP
+alchFile                dna_Na_WI.fep
+alchCol                 B
+alchOutFile             aqua-equil2.fepout
+alchOutFreq             1000
+
+alchVdwLambdaEnd        1.0
+alchElecLambdaStart     0.5
+alchVdWShiftCoeff       4.0
+alchDecouple            on
+
+alchEquilSteps          500000
+set numSteps            500000
+
+
+#set numMinSteps         1000
+
+runFEP 0.0 0.0 0.0 $numSteps
+
+

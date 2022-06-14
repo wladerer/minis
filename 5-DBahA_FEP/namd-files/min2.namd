@@ -1,0 +1,136 @@
+
+#############################################################
+## ADJUSTABLE PARAMETERS                                   ##
+#############################################################
+
+structure          dna_Na_WI.psf 
+coordinates        dna_Na_WI.pdb
+
+outputName         dna_Na_WI_min2
+binaryoutput       yes
+
+set temperature    300
+temperature         $temperature
+
+proc get_first_ts { xscfile } {
+  set fd [open $xscfile r]
+  gets $fd
+  gets $fd
+  gets $fd line
+  set ts [lindex $line 0]
+  close $fd
+  return $ts
+}
+#set firsttime [get_first_ts $inputName.restart.xsc]
+set firsttime      0
+firsttimestep $firsttime
+
+cellBasisVector1                 70     0.0      0.0
+cellBasisVector2                0.0      70      0.0
+cellBasisVector3                0.0     0.0      70
+cellOrigin                      0.0     0.0      0.0
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Input
+paraTypeCharmm	    on
+# use bond for water
+parameters          ../toppar/par_all36_prot.prm
+parameters          ../toppar/par_all36_na.prm
+parameters          ../toppar/par_all36_carb.prm
+parameters          ../toppar/par_all36_lipid.prm
+parameters          ../toppar/par_all36_cgenff.prm
+
+parameters	    ../toppar/toppar_water_ions.str
+
+parameters          ../toppar/sim-params.prm
+
+# Force-Field Parameters 
+exclude             scaled1-4
+1-4scaling          1.0
+switching           on
+switchdist          10
+cutoff              12
+pairlistdist        14
+
+# Integrator Parameters 
+timestep            2  
+rigidBonds          all  
+nonbondedFreq       1
+fullElectFrequency  2  
+stepspercycle       20
+
+#PME (for full-system periodic electrostatics)
+if {1} {
+PME                 yes
+PMEGridSpacing      1.0
+}
+
+# Constant Temperature Control 
+langevin            on    
+langevinDamping     2.0 
+langevinTemp        $temperature
+langevinHydrogen    off    
+
+# perform constant pressure simulation 
+if {1} {
+langevinPiston        on      
+langevinPistonTarget  1.01325 
+langevinPistonPeriod  200
+langevinPistonDecay   100
+langevinPistonTemp    $temperature
+
+useGroupPressure      yes
+}
+
+wrapwater	    on
+#wrapall	    on
+
+xstFreq             100 
+outputEnergies      100
+dcdfreq             100
+restartfreq         100
+outputPressure      100
+
+
+#############################################################
+## EXTRA PARAMETERS                                        ##
+#############################################################
+
+#Constrained Atoms Constraint (set PDB beta-column to 1)
+if {1} {
+constraints       on
+consref           dna_Na_WIbeta.pdb
+conskfile         dna_Na_WIbeta.pdb
+conskcol          B
+}
+
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+
+source                  ../tools/fep.tcl
+
+alch                    on
+alchType                FEP
+alchFile                dna_Na_WI.fep
+alchCol                 B
+alchOutFile             min2.fepout
+alchOutFreq             200
+
+alchVdwLambdaEnd        1.0
+alchElecLambdaStart     0.5
+alchVdWShiftCoeff       4.0
+alchDecouple            on
+
+alchEquilSteps          0
+set numSteps            0
+
+set numMinSteps		1000
+
+runFEPmin 0.0 0.0 0.0 $numSteps $numMinSteps $temperature
+
+
