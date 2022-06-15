@@ -25,7 +25,8 @@ def to_json(file):
         headers = data['modeling']['calculation']['dos']['partial']['array']['field']
         efermi = data['modeling']['calculation']['dos']['i']['#text']
         atoms = int(data['modeling']['atominfo']['atoms'])
-        
+
+                
         
         indices = np.array([])
         for i in range(1,atoms+1):
@@ -38,8 +39,10 @@ def to_json(file):
             dos_arrays.append(data['modeling']['calculation']['dos']['partial']['array']['set']['set'][ion]['set']['r'])
         
         df = pd.DataFrame(np.concatenate(dos_arrays))
-        
         df = pd.concat([df,indices])
+        return df
 
-        print(df)
-to_json('VASP_XML/vasprun.xml')
+data = to_json('VASP_XML/vasprun.xml')
+
+print(data[0])
+

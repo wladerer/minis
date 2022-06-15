@@ -92,9 +92,21 @@ def plotDOS_sepl(file, xrange=[0,2], yrange=[-4,6]):
             data[names[i+1]] = data[name] + data[names[i+1]]
 
 
+
+    #  <field>energy</field>
+    #  <field>  s</field>
+    #  <field> py</field>
+    #  <field> pz</field>
+    #  <field> px</field>
+    #  <field>dxy</field>
+    #  <field>dyz</field>
+    #  <field>dz2</field>
+    #  <field>dxz</field>
+    #  <field>dx2</field>        
+
     possible_cols = ['s','p','d','f']
-    data = data[['energy','s','pz','x2-y2','ind']]
-    data.rename(columns={'pz': 'p','x2-y2':'d'}, inplace=True)
+    data = data[['energy','s','pz','dx2','ind']]
+    data.rename(columns={'pz': 'p','dx2':'d'}, inplace=True)
     
 
     names = ['energy', 's', 'p', 'd']
