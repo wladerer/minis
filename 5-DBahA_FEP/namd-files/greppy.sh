@@ -17,32 +17,43 @@ declare -a residue2_atoms=('N1' 'C2' 'C6' 'C5' 'C4' 'N3' 'N4' 'O2' 'H6' 'H5' 'H4
 
 while read -r line 
 do
-	if [[ "$line" =~ .*" D   $residue1_end ".* ]] && [[ "$line" =~ .*" $residue1_strand ".* ]] 
+
+	#looking for  residue and strand of interest to be modified 
+	if [[ "$line" =~ .*" D   $residue1_number ".* ]] && [[ "$line" =~ .*" $residue1_strand ".* ]]
+	then
+		for name in "${residue1_atoms[@]}" #iterate over user defined atoms of interest
+		do
+			if [[ "$line" =~ " $name " ]] 			
+			then
+				echo "$line" >> ${residue_names[0]} #populate file with found strings
+				if [[ ${#name} == 3 ]]
+				then
+					sed -i "s/ ${name} G   D/${name}G AGH D/" ${residue_names[0]}
+				else
+					sed -i "s/$name  G   D/${name}G AGH D/" ${residue_names[0]} 
+				
+				fi
+			fi
+		done
+	fi
+done < NRAS-DBahA-single-top-step1.pdb
+
+
+while read -r line 
+do
+	if [[ "$line" =~ " D   8 ".*"D1" ]]  
 	then
 		(cat ${residue_names[0]}) >> NRAS-DBahA-dual-top-step2.pdb
                 rm ${residue_names[0]} 
 		touch ${residue_names[0]}
         fi 	
 
-	if [[ "$line" =~ .*" D   $residue1_number ".* ]] && [[ "$line" =~ .*" $residue1_strand ".* ]]
+	echo "$line" >> NRAS-DBahA-dual-top-step2.pdb	
+	echo "Normal: $line"
+
+	if [[ "$line" =~ " D   7 ".*"D1" ]]
 	then
-		echo "$line" >> ${residue_names[0]}
-		for name in "${residue1_atoms[@]}"
-		do
-       			if [[ "$line" =~ .*" $name ".* ]] 			
-			then
-				sed -i "s/$name/${name}G/" ${residue_names[0]}
-			fi
-	
-		done
-	else
-		echo "$line" >> NRAS-DBahA-dual-top-step2.pdb
-		echo "Normal: $line"
-	fi	
-done < NRAS-DBahA-single-top-step1.pdb
+		sed -i "s/ADE/AGH/" NRAS-DBahA-dual-top-step2.pdb	
+	fi
 
-#&& [[ ! "$line" =~ "ATOM       ${residue1_number} ".* ]] 
-
-
-#two while loops bc single and AVG are conflicting, we need to pull from diff files
-
+done < NRAS-DBahA-AVG-STR.pdb
