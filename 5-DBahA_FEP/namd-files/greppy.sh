@@ -15,6 +15,7 @@ declare -a residue_names=($residue1"_lines.txt" $residue2"_lines.txt")
 declare -a residue1_atoms=('N9' 'C8' 'C4' 'N3' 'C5' 'C6' 'N7' 'N1' 'O6' 'C2' 'N2' 'H8' 'H1' 'H21' 'H22')
 declare -a residue2_atoms=('N1' 'C2' 'C6' 'C5' 'C4' 'N3' 'N4' 'O2' 'H6' 'H5' 'H41' 'H42')
 
+
 while read -r line 
 do
 
@@ -36,11 +37,31 @@ do
 			fi
 		done
 	fi
+
+		#looking for residue2 and strand2 of interest to be modified 
+	if [[ "$line" =~ .*" D   $residue2_number ".* ]] && [[ "$line" =~ .*" $residue2_strand ".* ]]
+	then
+		for name in "${residue2_atoms[@]}" #iterate over user defined atoms of interest
+		do
+			if [[ "$line" =~ " $name " ]] #checks to see if the atom is in the line		
+			then
+				echo "$line" >> ${residue_names[1]} #populate file with found strings
+				if [[ ${#name} == 3 ]]
+				then
+					sed -i "s/ ${name} C   D/${name}C TCH D/" ${residue_names[1]}
+				else
+					sed -i "s/$name  C   D/${name}C TCH D/" ${residue_names[1]} 
+				
+				fi
+			fi
+		done
+	fi
 done < NRAS-DBahA-single-top-step1.pdb
 
 
 while read -r line 
 do
+	#residue 1
 	if [[ "$line" =~ " D   8 ".*"D1" ]]  
 	then
 		(cat ${residue_names[0]}) >> NRAS-DBahA-dual-top-step2.pdb
@@ -54,6 +75,23 @@ do
 	if [[ "$line" =~ " D   7 ".*"D1" ]]
 	then
 		sed -i "s/ADE/AGH/" NRAS-DBahA-dual-top-step2.pdb	
+	fi
+
+
+	#residue2
+		if [[ "$line" =~ " D   6 ".*"D2" ]]  
+	then
+		(cat ${residue_names[1]}) >> NRAS-DBahA-dual-top-step2.pdb
+                rm ${residue_names[1]} 
+		touch ${residue_names[1]}
+        fi 	
+
+	echo "$line" >> NRAS-DBahA-dual-top-step2.pdb	
+	echo "Normal: $line"
+
+	if [[ "$line" =~ " D   5 ".*"D2" ]]
+	then
+		sed -i "s/ADE/TCH/" NRAS-DBahA-dual-top-step2.pdb	
 	fi
 
 done < NRAS-DBahA-AVG-STR.pdb
