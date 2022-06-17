@@ -69,17 +69,8 @@ do
 		touch ${residue_names[0]}
         fi 	
 
-	echo "$line" >> NRAS-DBahA-dual-top-step2.pdb	
-	echo "Normal: $line"
-
-	if [[ "$line" =~ " D   7 ".*"D1" ]]
-	then
-		sed -i "s/ADE/AGH/" NRAS-DBahA-dual-top-step2.pdb	
-	fi
-
-
 	#residue2
-		if [[ "$line" =~ " D   6 ".*"D2" ]]  
+	if [[ "$line" =~ " D   6 ".*"D2" ]]  
 	then
 		(cat ${residue_names[1]}) >> NRAS-DBahA-dual-top-step2.pdb
                 rm ${residue_names[1]} 
@@ -89,9 +80,14 @@ do
 	echo "$line" >> NRAS-DBahA-dual-top-step2.pdb	
 	echo "Normal: $line"
 
+	if [[ "$line" =~ " D   7 ".*"D1" ]]
+	then
+		sed -i "s/ADE/AGH/" NRAS-DBahA-dual-top-step2.pdb	
+	fi
+
 	if [[ "$line" =~ " D   5 ".*"D2" ]]
 	then
-		sed -i "s/ADE/TCH/" NRAS-DBahA-dual-top-step2.pdb	
+		sed -i "s/THY/TCH/" NRAS-DBahA-dual-top-step2.pdb	
 	fi
 
 done < NRAS-DBahA-AVG-STR.pdb
