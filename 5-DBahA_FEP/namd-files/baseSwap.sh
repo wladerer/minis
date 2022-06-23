@@ -1,7 +1,8 @@
 #!/bin/bash
-
 #declares residue names and name array
 residue1="gua"
+new_residue1="AGH"
+new_residue2="TCH"
 residue1_abbrev="G"
 residue1_number=7 # Only works for now for single digit residue number
 residue1_end=8
