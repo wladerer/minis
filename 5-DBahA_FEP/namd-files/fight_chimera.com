@@ -4,4 +4,4 @@ addh
 swapna C :5 & @/pdbSegment=D2
 sel :5 & @/pdbSegment=D2
 addh
-save
+write format pdb #0 NRAS-DBahA-single-top-step1.pdb

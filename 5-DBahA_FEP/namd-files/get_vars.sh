@@ -8,3 +8,4 @@ STRING=$(sed -n '3p' $1)
 IFS=' ' read -ra ATOMS <<< $STRING
 }
 
+get_vars GUA_data.txt
