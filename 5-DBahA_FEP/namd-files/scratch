@@ -3,9 +3,7 @@
 resOld=$1
 resPos=$2
 resNew=$3
-#make later resTLC=$1$3H
 resStr="$4"
-#residue end = $($2 +_ 1)
 penultimateLine=$(tail -2 NRAS-DBahA-AVG-STR.pdb | head -n 1)
 penultimateArray=($penultimateLine)
 
@@ -39,3 +37,18 @@ write format pdb #0 NRAS-DBahA-single-top-step1.pdb
 END
 
 chimera --nogui --silent NRAS-DBahA-AVG-STR.pdb swapna.com
+
+#declares atoms of interest for each residue
+
+
+declare -a G_atoms=('N9' 'C8' 'C4' 'N3' 'C5' 'C6' 'N7' 'N1' 'O6' 'C2' 'N2' 'H8' 'H1' 'H21' 'H22')
+declare -a C_atoms=('N1' 'C2' 'C6' 'C5' 'C4' 'N3' 'N4' 'O2' 'H6' 'H5' 'H41' 'H42')
+declare -a T_atoms=('N1' 'C6' 'H6' 'C2' 'O2' 'N3' 'H3' 'C4' 'O4' 'C5' 'C5M' 'H51' 'H52' 'H53')
+declare -a A_atoms=('N9' 'C5' 'N7' 'C8' 'H8' 'N1' 'C2' 'H2' 'N3' 'C4' 'C6' 'N6' 'H61' 'H62')
+
+
+if [[ $resNew = 'A' ]]; then resAtoms=${A_atoms[@]}; compAtoms=${T_atoms[@]}
+elif [[ $resNew = 'T' ]]; then resAtoms=${T_atoms[@]}; compAtoms=${A_atoms[@]}
+elif [[ $resNew = 'G' ]]; then resAtoms=${G_atoms[@]}; compAtoms=${C_atoms[@]}
+elif [[ $resNew = 'C' ]]; then resAtoms=${C_atoms[@]}; compAtoms=${G_atoms[@]}; fi
+
