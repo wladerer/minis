@@ -9,23 +9,10 @@ resNew=$3
 resStr="$4"
 
 #This is bash error handling at its finest
-	if [[ "$resOld" != [ATGC] ]] 
-    then
-        echo 'error: First argument must be: A,T,G,C'
-		exit
-    fi
-
-    re='^[0-9]+$'
-    if ! [[ $resPos =~ $re ]] ; then
-    echo "error: Second argument must be an integer" >&2; exit 1
-    fi
-
-	if [[ "$resNew" != [ATGC] ]] 
-    then
-        echo 'error: Third argument must be: A,T,G,C'
-		exit 
-    fi
-
+	re='^[0-9]+$'
+	if [[ "$resOld" != [ATGC] ]]; then echo 'error: First argument must be: A,T,G,C' ; exit ;fi
+    if ! [[ $resPos =~ $re ]]; then echo "error: Second argument must be an integer" >&2; exit 1 ; fi
+	if [[ "$resNew" != [ATGC] ]]; then echo 'error: Third argument must be: A,T,G,C' ; exit ; fi
 
 
 penultimateLine=$(tail -2 NRAS-DBahA-AVG-STR.pdb | head -n 1)
@@ -36,6 +23,9 @@ compPos="$(($resN + 1 - $resPos))"
 resEnd="$(($resPos + 1))"
 compEnd="$(($compPos + 1))"
 
+
+#More error handling
+if [ $resPos -gt $(($resN)) ]; then echo "error: residue ${resPos} is out of range ($((${resN})))" ; exit ; fi
 
 #Determines the complement base's strand
 if [ $resStr = 'D1' ]
