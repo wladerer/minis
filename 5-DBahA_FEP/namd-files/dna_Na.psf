@@ -1,6 +1,6 @@
 PSF EXT
 
-      35 !NTITLE
+      36 !NTITLE
  REMARKS original generated structure x-plor psf file
  REMARKS 26 patches were applied to the molecule.
  REMARKS topology ../toppar/top_all36_na.rtf 
@@ -10,6 +10,7 @@ PSF EXT
  REMARKS topology ../toppar/N6-dA-DBahA_IUPAC_atoms.str 
  REMARKS segment D1 { first 5TER; last 3TER; auto angles dihedrals }
  REMARKS segment D2 { first 5TER; last 3TER; auto angles dihedrals }
+ REMARKS segment D3 { first NONE; last NONE; auto angles dihedrals }
  REMARKS patch 3TER D1:11  
  REMARKS patch 5TER D1:1  
  REMARKS patch DEO5 D1:1  
@@ -37,7 +38,7 @@ PSF EXT
  REMARKS patch DEOX D2:8  
  REMARKS patch DEOX D2:9  
 
-     764 !NATOM
+     784 !NATOM
          1 D1       1        CYT      H5T      HN5      0.430000        1.0080           0
          2 D1       1        CYT      O5'      ON5     -0.660000       15.9994           0
          3 D1       1        CYT      C5'      CN8B     0.050000       12.0110           0
@@ -802,6 +803,26 @@ PSF EXT
        762 D2       11       GUA      H3'      HN7      0.090000        1.0080           0
        763 D2       11       GUA      O3'      ON5     -0.660000       15.9994           0
        764 D2       11       GUA      H3T      HN5      0.430000        1.0080           0
+       765 D3       1        SOD      SOD      SOD      1.000000       22.9898           0
+       766 D3       2        SOD      SOD      SOD      1.000000       22.9898           0
+       767 D3       3        SOD      SOD      SOD      1.000000       22.9898           0
+       768 D3       4        SOD      SOD      SOD      1.000000       22.9898           0
+       769 D3       5        SOD      SOD      SOD      1.000000       22.9898           0
+       770 D3       6        SOD      SOD      SOD      1.000000       22.9898           0
+       771 D3       7        SOD      SOD      SOD      1.000000       22.9898           0
+       772 D3       8        SOD      SOD      SOD      1.000000       22.9898           0
+       773 D3       9        SOD      SOD      SOD      1.000000       22.9898           0
+       774 D3       10       SOD      SOD      SOD      1.000000       22.9898           0
+       775 D3       11       SOD      SOD      SOD      1.000000       22.9898           0
+       776 D3       12       SOD      SOD      SOD      1.000000       22.9898           0
+       777 D3       13       SOD      SOD      SOD      1.000000       22.9898           0
+       778 D3       14       SOD      SOD      SOD      1.000000       22.9898           0
+       779 D3       15       SOD      SOD      SOD      1.000000       22.9898           0
+       780 D3       16       SOD      SOD      SOD      1.000000       22.9898           0
+       781 D3       17       SOD      SOD      SOD      1.000000       22.9898           0
+       782 D3       18       SOD      SOD      SOD      1.000000       22.9898           0
+       783 D3       19       SOD      SOD      SOD      1.000000       22.9898           0
+       784 D3       20       SOD      SOD      SOD      1.000000       22.9898           0
 
      825 !NBOND: bonds
          1         2         2         3         3         6         3         4
@@ -2753,7 +2774,9 @@ PSF EXT
          0         0         0         0         0         0         0         0
          0         0         0         0         0         0         0         0
          0         0         0         0         0         0         0         0
-         0         0         0         0
+         0         0         0         0         0         0         0         0
+         0         0         0         0         0         0         0         0
+         0         0         0         0         0         0         0         0
 
        1       0 !NGRP
          0         0         0

@@ -1,0 +1,22 @@
+CRYST1    0.000    0.000    0.000  90.00  90.00  90.00 P 1           1
+ATOM      1  SOD SOD     1       1.453  59.044  70.222  0.00  0.00     D3 SOD   
+ATOM      2  SOD SOD     2       7.953  73.544  71.722  0.00  0.00     D3 SOD   
+ATOM      3  SOD SOD     3      -4.547  74.044  59.222  0.00  0.00     D3 SOD   
+ATOM      4  SOD SOD     4      -6.047  74.544  78.722  0.00  0.00     D3 SOD   
+ATOM      5  SOD SOD     5      12.953  67.544  63.722  0.00  0.00     D3 SOD   
+ATOM      6  SOD SOD     6      -1.547  60.044  60.722  0.00  0.00     D3 SOD   
+ATOM      7  SOD SOD     7     -14.547  69.044  78.222  0.00  0.00     D3 SOD   
+ATOM      8  SOD SOD     8       4.953  60.044  80.222  0.00  0.00     D3 SOD   
+ATOM      9  SOD SOD     9     -12.547  64.544  65.722  0.00  0.00     D3 SOD   
+ATOM     10  SOD SOD    10       5.953  84.044  62.222  0.00  0.00     D3 SOD   
+ATOM     11  SOD SOD    11      10.453  63.044  54.222  0.00  0.00     D3 SOD   
+ATOM     12  SOD SOD    12      -1.047  64.544  88.722  0.00  0.00     D3 SOD   
+ATOM     13  SOD SOD    13      -9.547  79.044  67.222  0.00  0.00     D3 SOD   
+ATOM     14  SOD SOD    14      15.953  77.544  54.222  0.00  0.00     D3 SOD   
+ATOM     15  SOD SOD    15     -14.047  56.544  79.222  0.00  0.00     D3 SOD   
+ATOM     16  SOD SOD    16       2.953  68.044  46.722  0.00  0.00     D3 SOD   
+ATOM     17  SOD SOD    17       3.953  75.044  82.222  0.00  0.00     D3 SOD   
+ATOM     18  SOD SOD    18      -5.547  50.544  69.722  0.00  0.00     D3 SOD   
+ATOM     19  SOD SOD    19      11.953  60.044  72.222  0.00  0.00     D3 SOD   
+ATOM     20  SOD SOD    20      -8.547  69.544  50.222  0.00  0.00     D3 SOD   
+END
