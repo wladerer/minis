@@ -119,9 +119,12 @@ do
 done < NRAS-DBahA-single-top-step1.pdb
 
 
+#adds lines into a new dual-top file line by line
+#determines if the new line is unedited or not
+#if the line needs to be edited, then the new lines are inserted from the slice text files
 while read -r line 
 do
-	#new residue
+
 	if [[ "$line" =~ " D   ${resEnd} ".*${resStr} ]]  
 	then
 		(cat "${resNew}_slice.txt") >> NRAS-DBahA-dual-top-step2.pdb
@@ -129,7 +132,6 @@ do
 		touch "${resNew}_slice.txt"
         fi 	
 
-	#compliment
 	if [[ "$line" =~ " D   ${compEnd} ".*${compStr} ]]  
 	then
 		(cat "${compNew}_slice.txt") >> NRAS-DBahA-dual-top-step2.pdb
@@ -139,11 +141,9 @@ do
 
 	echo "$line" >> NRAS-DBahA-dual-top-step2.pdb	
 
-	pattern1="ATOM .* D .* ${resPos} .*${resStr}"
+	pattern1="ATOM .* D .* ${resPos} .*${resStr}" #regex patterns to replace the old three letter codes
 	pattern1="ATOM .* D .* ${compPos} .*${compStr}"
 
-
-	#  ADE D   9
 
 	if [[ $line =~ $pattern1 ]] && [[ $resPos -gt 9 ]]
 	then
