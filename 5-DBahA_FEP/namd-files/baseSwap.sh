@@ -27,10 +27,10 @@ elif [[ $resNew = 'G' ]]; then compNew='C'
 elif [[ $resNew = 'C' ]]; then compNew='G';fi
 
 
-if [[ $resOld = 'A' ]]; then resOldTLC='ADE' ; compOldTLC='THY' ; 
-elif [[ $resOld = 'T' ]]; then resOldTLC='THY' ; compOldTLC='ADE' ;
-elif [[ $resOld = 'G' ]]; then resOldTLC='GUA' ; compOldTLC='CYT' ;
-elif [[ $resOld = 'C' ]]; then resOldTLC='CYT' ; compOldTLC='GUA' ; fi
+if [[ $resOld = 'A' ]]; then resOldTLC='ADE' ; compOldTLC='THY' ;  compOld='T'
+elif [[ $resOld = 'T' ]]; then resOldTLC='THY' ; compOldTLC='ADE' ; compOld='A'
+elif [[ $resOld = 'G' ]]; then resOldTLC='GUA' ; compOldTLC='CYT' ; compOld='C'
+elif [[ $resOld = 'C' ]]; then resOldTLC='CYT' ; compOldTLC='GUA' ; compOld='G'; fi
 
 
 #The following creates our Chimera script that then creates the single-top-step1 pdb file
@@ -71,19 +71,14 @@ do
 	then
 		for name in ${resAtoms[@]} #iterate over user defined atoms of interest
 		do
-			echo $name
 			if [[ "$line" =~ " $name " ]] 			
 			then
-				echo 'found matching line'
 				echo "$line" >> "${resNew}_slice.txt" #populate file with found strings
 				if [[ ${#name} == 3 ]]
 				then
-					echo 'added to file'
 					sed -i "s/ ${name} ${resNew}   D/${name}${resNew} ${resOld}${resNew}H D/" "${resNew}_slice.txt"
 				else
-					echo 'added to file'
 					sed -i "s/$name  ${resNew}   D/${name}${resNew} ${resOld}${resNew}H D/" "${resNew}_slice.txt" 
-				
 				fi
 			fi
 		done
@@ -132,14 +127,18 @@ do
 
 
 
-	if [[ "$line" =~ " D   ${resPos} ".*${resStr} ]]
+	if [[ "$line" =~ " D   ${resPos} ".*${resStr} ]] && [[ ${#resPos} == 2 ]]
 	then
-		sed -i "s/${resOldTLC}/${resOld}${resNew}H/" NRAS-DBahA-dual-top-step2.pdb	
+		sed -i -r "s#${resOldTLC} .* ${resPos} #${resOld}${resNew}H D  ${resPos} #" NRAS-DBahA-dual-top-step2.pdb	
+	else
+		sed -i -r "s#${resOldTLC} .* ${resPos} #${resOld}${resNew}H D   ${resPos} #" NRAS-DBahA-dual-top-step2.pdb	
 	fi
 
-	if [[ "$line" =~ " D   ${compPos} ".*${compStr} ]]
+	if [[ "$line" =~ " D   ${compPos} ".*${compStr} ]] && [[ ${#compPos} == 2 ]]
 	then
-		sed -i "s/${compOldTLC}/${compOld}${compNew}H/" NRAS-DBahA-dual-top-step2.pdb	
+		sed -i -r "s#${compOldTLC} .* ${compPos} #${compOld}${compNew}H D  ${compPos} #" NRAS-DBahA-dual-top-step2.pdb	
+	else
+		sed -i -r "s#${compOldTLC} .* ${compPos} #${compOld}${compNew}H D   ${compPos} #" NRAS-DBahA-dual-top-step2.pdb
 	fi
 
 done < NRAS-DBahA-AVG-STR.pdb
@@ -147,3 +146,8 @@ done < NRAS-DBahA-AVG-STR.pdb
 rm swapna.com
 rm "${resNew}_slice.txt"
 rm "${compNew}_slice.txt"
+
+/bin/grep ' D1 ' NRAS-DBahA-dual-top-step2.pdb > nab1.pdb
+/bin/grep ' D2 ' NRAS-DBahA-dual-top-step2.pdb > nab2.pdb
+vmd -dispdev text -e psfgen-dual-topology.tcl
+vmd -psf dna.psf -pdb dna.pdb
