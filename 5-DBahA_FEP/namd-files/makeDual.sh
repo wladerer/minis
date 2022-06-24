@@ -200,21 +200,26 @@ echo "Swapping resiude ${compPos} (${compOldTLC}) in strand ${compStr} for ${com
 echo "Two files have been prepared -- single and dual topology"
 echo "*** Check that the requested input has been satisfactorily executed before the next step ***"
 
-echo |
-echo |
-echo |
+echo "|"
+echo "|"
+echo "|"
 echo "Would you like to continue? [y/n]"
 
 while true; do
 	read response
-
 	case $response in 
-		[yY]*)
-		./vmdToFep.sh
-		break;;
+		''|[yY]*)
+			continue=true
+			break;;
 		[nN]*)
-		exit;;
-		#*)
-		echo "Invalid Input";;
+			continue=false
+			break;;
+		*)
+			echo "Invalid Input";;
 	esac
 done
+
+if continue
+	./vmdToFep.sh
+	./changeBeta.sh
+fi
