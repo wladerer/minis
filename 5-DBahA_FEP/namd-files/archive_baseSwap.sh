@@ -1,6 +1,6 @@
 #!/bin/bash
 
-chimera --nogui --silent NRAS-DBahA-AVG-STR.pdb fight_chimera.com
+chimera --nogui --silent NRAS-DBahA-AVG-STR.pdb swapna.com 
 
 #declares residue names and name array
 residue1="gua"
