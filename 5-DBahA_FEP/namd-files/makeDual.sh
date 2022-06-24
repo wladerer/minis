@@ -141,22 +141,24 @@ do
 
 	echo "$line" >> NRAS-DBahA-dual-top-step2.pdb	
 
-	pattern1="ATOM .* D .* ${resPos} .*${resStr}" #regex patterns to replace the old three letter codes
-	pattern1="ATOM .* D .* ${compPos} .*${compStr}"
+	pattern1=".* ${resOldTLC} D .* ${resPos} .* ${resStr}" #regex patterns to replace the old three letter codes
+	pattern2=".* ${compOldTLC} D .* ${compPos} .* ${compStr}"
 
 
 	if [[ $line =~ $pattern1 ]] && [[ $resPos -gt 9 ]]
 	then
 		sed -i -r "s# ${resOldTLC} D  ${resPos} # ${resOld}${resNew}H D  ${resPos} #" NRAS-DBahA-dual-top-step2.pdb	
-	else
-		sed -i -r "s# ${resOldTLC} D ${resPos} # ${resOld}${resNew}H D   ${resPos} #" NRAS-DBahA-dual-top-step2.pdb	
+	elif [[ $line =~ $pattern1 ]]
+	then
+		sed -i -r "s# ${resOldTLC} D   ${resPos} # ${resOld}${resNew}H D   ${resPos} #" NRAS-DBahA-dual-top-step2.pdb	
 	fi
 
 	if [[ $line =~ $pattern2 ]] && [[ $compPos -gt 9 ]]
 	then
 		sed -i -r "s# ${compOldTLC} D  ${compPos} # ${compOld}${compNew}H D  ${compPos} #" NRAS-DBahA-dual-top-step2.pdb	
-	else
-		sed -i -r "s# ${compOldTLC} D ${compPos} # ${compOld}${compNew}H D   ${compPos} #" NRAS-DBahA-dual-top-step2.pdb	
+	elif [[ $line =~ $pattern2 ]]
+	then
+		sed -i -r "s# ${compOldTLC} D   ${compPos} # ${compOld}${compNew}H D   ${compPos} #" NRAS-DBahA-dual-top-step2.pdb	
 	fi
 
 done < NRAS-DBahA-AVG-STR.pdb
@@ -164,6 +166,30 @@ done < NRAS-DBahA-AVG-STR.pdb
 rm swapna.com
 rm "${resNew}_slice.txt"
 rm "${compNew}_slice.txt"
+
+resNewTLC="${resOld}${resNew}H"
+compNewTLC="${compOld}${compNew}H"
+
+cat << EOF > verbose_input.log
+Residue abbreviation: ${resOld} 
+Residue position: ${resPos}
+New residue abbreviation: ${resNew}
+Residue Strand: ${resStr}
+Complimentary base position: ${compPos}
+New residue three letter code: ${resNewTLC}
+New complimentary base three letter code: ${compNewTLC}
+EOF
+
+cat << EOF > input.log
+${resOld}
+${resPos}
+${resNew}
+${resStr}
+${compPos}
+${resNewTLC}
+${compNewTLC}
+EOF
+
 
 echo "Swapping residue ${resPos} (${resOldTLC}) in strand ${resStr} for ${resNew}"
 echo "Swapping resiude ${compPos} (${compOldTLC}) in strand ${compStr} for ${compNew}"
