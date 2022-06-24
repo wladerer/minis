@@ -167,8 +167,8 @@ rm swapna.com
 rm "${resNew}_slice.txt"
 rm "${compNew}_slice.txt"
 
-resNewTLC="${resOld}${resNew}H"
-compNewTLC="${compOld}${compNew}H"
+resDualTLC="${resOld}${resNew}H"
+compDualTLC="${compOld}${compNew}H"
 
 cat << EOF > verbose_input.log
 Residue abbreviation: ${resOld} 
@@ -176,8 +176,10 @@ Residue position: ${resPos}
 New residue abbreviation: ${resNew}
 Residue Strand: ${resStr}
 Complimentary base position: ${compPos}
-New residue three letter code: ${resNewTLC}
-New complimentary base three letter code: ${compNewTLC}
+New residue three letter code: ${resDualTLC}
+New complimentary base three letter code: ${compDualTLC}
+Old complimentary base: ${compOld}
+New complimentary base: ${compNew}
 EOF
 
 cat << EOF > input.log
@@ -186,8 +188,10 @@ ${resPos}
 ${resNew}
 ${resStr}
 ${compPos}
-${resNewTLC}
-${compNewTLC}
+${resDualTLC}
+${compDualTLC}
+${compOld}
+${compNew}
 EOF
 
 
@@ -195,3 +199,22 @@ echo "Swapping residue ${resPos} (${resOldTLC}) in strand ${resStr} for ${resNew
 echo "Swapping resiude ${compPos} (${compOldTLC}) in strand ${compStr} for ${compNew}"
 echo "Two files have been prepared -- single and dual topology"
 echo "*** Check that the requested input has been satisfactorily executed before the next step ***"
+
+echo |
+echo |
+echo |
+echo "Would you like to continue? [y/n]"
+
+while true; do
+	read response
+
+	case $response in 
+		[yY]*)
+		./vmdToFep.sh
+		break;;
+		[nN]*)
+		exit;;
+		#*)
+		echo "Invalid Input";;
+	esac
+done
