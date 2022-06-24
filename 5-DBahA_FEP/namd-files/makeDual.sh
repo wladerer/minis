@@ -1,5 +1,8 @@
 #!/bin/bash
 
+rm NRAS-DBahA-single-top-step1.pdb 
+rm NRAS-DBahA-dual-top-step2.pdb
+
 resOld=$1
 resPos=$2
 resNew=$3
@@ -146,20 +149,24 @@ do
 
 	echo "$line" >> NRAS-DBahA-dual-top-step2.pdb	
 
+	pattern1="ATOM .* D .* ${resPos} .*${resStr}"
+	pattern1="ATOM .* D .* ${compPos} .*${compStr}"
 
 
-	if [[ "$line" =~ " D   ${resPos} ".*${resStr} ]] && [[ 10 -gt 9 ]]
+	#  ADE D   9
+
+	if [[ $line =~ $pattern1 ]] && [[ $resPos -gt 9 ]]
 	then
-		sed -i -r "s#${resOldTLC} .* ${resPos} #${resOld}${resNew}H D  ${resPos} #" NRAS-DBahA-dual-top-step2.pdb	
+		sed -i -r "s# ${resOldTLC} D  ${resPos} # ${resOld}${resNew}H D  ${resPos} #" NRAS-DBahA-dual-top-step2.pdb	
 	else
-		sed -i -r "s#${resOldTLC} .* ${resPos} #${resOld}${resNew}H D   ${resPos} #" NRAS-DBahA-dual-top-step2.pdb	
+		sed -i -r "s# ${resOldTLC} D ${resPos} # ${resOld}${resNew}H D   ${resPos} #" NRAS-DBahA-dual-top-step2.pdb	
 	fi
 
-	if [[ "$line" =~ " D   ${compPos} ".*${compStr} ]] && [[ "$compPos" -gt 9 ]]
+	if [[ $line =~ $pattern2 ]] && [[ $compPos -gt 9 ]]
 	then
-		sed -i -r "s#${compOldTLC} .* ${compPos} #${compOld}${compNew}H D  ${compPos} #" NRAS-DBahA-dual-top-step2.pdb	
+		sed -i -r "s# ${compOldTLC} D  ${compPos} # ${compOld}${compNew}H D  ${compPos} #" NRAS-DBahA-dual-top-step2.pdb	
 	else
-		sed -i -r "s#${compOldTLC} .* ${compPos} #${compOld}${compNew}H D   ${compPos} #" NRAS-DBahA-dual-top-step2.pdb
+		sed -i -r "s# ${compOldTLC} D ${compPos} # ${compOld}${compNew}H D   ${compPos} #" NRAS-DBahA-dual-top-step2.pdb	
 	fi
 
 done < NRAS-DBahA-AVG-STR.pdb
@@ -168,7 +175,7 @@ rm swapna.com
 rm "${resNew}_slice.txt"
 rm "${compNew}_slice.txt"
 
-echo "Swapping ${resOld} in residue ${resPos} for ${resNew}"
-echo "Swapping ${compOld} in residue ${compPos} for ${compNew}"
+echo "Swapping residue ${resPos} (${resOldTLC}) in strand ${resStr} for ${resNew}"
+echo "Swapping resiude ${compPos} (${compOldTLC}) in strand ${compStr} for ${compNew}"
 echo "Two files have been prepared -- single and dual topology"
 echo "*** Check that the requested input has been satisfactorily executed before the next step ***"
