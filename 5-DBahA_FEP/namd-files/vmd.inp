@@ -1,0 +1,3 @@
+package require cionize
+namespace import ::cionize::*
+cionize -mol 0 -np 1 -ions "{SOD 20 1}"
