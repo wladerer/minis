@@ -71,3 +71,25 @@ do
     line_number=$( grep -n "$pattern" dna_Na_WI.fep | cut -f1 -d: )
     sed -i -r "${line_number}s#${line}#${new_line}#" dna_Na_WI.fep
 done
+
+
+
+pattern=".* N3  CYT D   1 .* D1"
+grep -n "$pattern" dna_Na_WI.fep | cut -f3 -d: 
+
+line=($(grep -n ".* N3  CYT D   1 .* D1" dna_Na_WI.fep))
+N3_CYT1_D1=$((${line[1]}-1))
+
+line=($(grep -n ".* N1  GUA D  11 .* D2" dna_Na_WI.fep))
+N1_GUA11_D2=$((${line[1]}-1))
+
+line=($(grep -n ".* N1  GUA D  11 .* D1" dna_Na_WI.fep))
+N1_GUA11_D1=$((${line[1]}-1))
+
+line=($(grep -n ".* N3  CYT D   1 .* D2" dna_Na_WI.fep))
+N3_CYT1_D2=$((${line[1]}-1))
+
+cat << END > extrabonds.txt
+bond ${N3_CYT1_D1} ${N1_GUA11_D2} 4 3.00
+bond ${N1_GUA11_D1} ${N3_CYT1_D2} 4 3.00
+END

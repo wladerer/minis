@@ -1,15 +1,18 @@
 #!/bin/bash
 
-resPos=7
-resStr='D1'
-pattern=" D   ${resPos}.*${resStr}"
+line=($(grep -n ".* N3  CYT D   1 .* D1" dna_Na_WI.fep))
+N3_CYT1_D1=$((${line[1]}-1))
 
-while read -r line 
-do
+line=($(grep -n ".* N1  GUA D  11 .* D2" dna_Na_WI.fep))
+N1_GUA11_D2=$((${line[1]}-1))
 
-	if [[ $line =~ $pattern ]] && [[ "$resPos" -gt 6 ]]
-	then
-        echo 'higher'
-	fi
+line=($(grep -n ".* N1  GUA D  11 .* D1" dna_Na_WI.fep))
+N1_GUA11_D1=$((${line[1]}-1))
 
-done < NRAS-DBahA-AVG-STR.pdb
+line=($(grep -n ".* N3  CYT D   1 .* D2" dna_Na_WI.fep))
+N3_CYT1_D2=$((${line[1]}-1))
+
+cat << END > extrabonds.txt
+bond ${N3_CYT1_D1} ${N1_GUA11_D2} 4 3.00
+bond ${N1_GUA11_D1} ${N3_CYT1_D2} 4 3.00
+END
