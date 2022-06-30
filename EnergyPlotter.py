@@ -18,19 +18,34 @@ def loadIters(titles):
 	
 	iterations = []
 	for data in iteration_data:
-		reader = get_attArray(data, '      SCF            ') #Garbage column name from energy file
+		reader = get_attArray(data, 'SCF') #Garbage column name from energy file
 		valid_nums = reader[~np.isnan(reader)] #removes NaN values
 		iterations.append(valid_nums)
 
 	return iterations
 
 #replace this with the titles of the energy files
-titles = ['thf_energy_1.csv','thf_energy_2.csv','thf_energy_3.csv','thf_energy_4.csv','thf_energy_5.csv','thf_energy_6.csv']
+titles = ['energy_1.csv', 'energy_2.csv']
 
-loadIters(titles)
+# loadIters(titles)
 
-energies = np.concatenate(tuple((map(tuple, loadIters(titles))))) #creates a tuple of arrays that contain SCF energies
+# energies = np.concatenate(tuple((map(tuple, loadIters(titles))))) #creates a tuple of arrays that contain SCF energies
 
-plt.plot(range(len(energies)),energies)
-plt.show()
+data = pd.read_excel('energy_2.xml')
+print(data)
+
+# plt.plot(range(len(energies)),energies)
+# plt.show()
+
+
+# data = pd.read_csv('energy.csv')
+# ar = data['SCF'].to_numpy() 
+# norm = (ar/np.max(ar))
+# max = np.max(ar)
+# min = np.min(ar)
+# dist = max - min
+# scaled = ( ar - max ) / dist
+
+
+# print(scaled)
 
